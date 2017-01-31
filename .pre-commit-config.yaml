@@ -1,0 +1,12 @@
+-   repo: https://github.com/pre-commit/pre-commit-hooks.git
+    sha: v0.7.0
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+-   repo: local
+    hooks:
+    -   id: gofmt
+        name: gofmt
+        language: system
+        entry: gofmt -l -w
+        files: \.go$
