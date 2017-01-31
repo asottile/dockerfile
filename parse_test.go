@@ -7,6 +7,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestAllCmds(t *testing.T) {
+	ret := AllCmds()
+	assert.Equal(t, ret[:3], []string{"add", "arg", "cmd"})
+}
+
 func TestParseReaderParseError(t *testing.T) {
 	dockerfile := "FROM ubuntu:xenial\nCMD [\"echo\", 1]"
 	_, err := ParseReader(bytes.NewBufferString(dockerfile))
