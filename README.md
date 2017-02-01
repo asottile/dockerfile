@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/asottile/dockerfile.svg?branch=master)](https://travis-ci.org/asottile/dockerfile)
+
 dockerfile
 ==========
 
@@ -73,4 +75,4 @@ go get github.com/asottile/dockerfile
 
 ### Usage
 
-TODO: link to godoc
+[godoc](https://godoc.org/github.com/asottile/dockerfile)
