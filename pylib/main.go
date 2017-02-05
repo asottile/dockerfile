@@ -20,7 +20,7 @@ import (
 	"github.com/asottile/dockerfile"
 )
 
-func raise(err error) {
+func raise(err error) *C.PyObject {
 	var tp *C.PyObject
 	switch err.(type) {
 	case dockerfile.IOError:
@@ -33,6 +33,7 @@ func raise(err error) {
 	cstr := C.CString(err.Error())
 	C.PyErr_SetString(tp, cstr)
 	C.free(unsafe.Pointer(cstr))
+	return nil
 }
 
 func stringToPy(s string) *C.PyObject {
@@ -118,10 +119,6 @@ func cmdsToPy(cmds []dockerfile.Command) *C.PyObject {
 		pyCmd := C.PyDockerfile_NewCommand(
 			pyCmd, pySubCmd, pyJson, pyOriginal, pyStartLine, pyValue,
 		)
-		if pyCmd == nil {
-			decrefAll()
-			return nil
-		}
 		C.PyTuple_SetItem(ret, C.Py_ssize_t(i), pyCmd)
 	}
 	return ret
@@ -151,8 +148,7 @@ func parse_file(self *C.PyObject, args *C.PyObject) *C.PyObject {
 	}
 	cmds, err := dockerfile.ParseFile(filename)
 	if err != nil {
-		raise(err)
-		return nil
+		return raise(err)
 	}
 	return cmdsToPy(cmds)
 }
@@ -165,8 +161,7 @@ func parse_string(self *C.PyObject, args *C.PyObject) *C.PyObject {
 	}
 	cmds, err := dockerfile.ParseReader(bytes.NewBufferString(s))
 	if err != nil {
-		raise(err)
-		return nil
+		return raise(err)
 	}
 	return cmdsToPy(cmds)
 }

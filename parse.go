@@ -87,11 +87,7 @@ func ParseFile(filename string) ([]Command, error) {
 	if err != nil {
 		return nil, IOError{err.Error()}
 	}
-	defer func() {
-		if err := file.Close(); err != nil {
-			panic(err)
-		}
-	}()
+	defer file.Close()
 
 	return ParseReader(file)
 }
