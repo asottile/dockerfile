@@ -9,7 +9,7 @@ matrix:
         -   env: TOXENV=py36 GO=1.7
             python: 3.6
         -   env: TOXENV=pypy GO=1.7
-            python: pypy-5.7.1
+            python: pypy-5.3.1
 install:
     - |
         export GOPATH=~/gopath
