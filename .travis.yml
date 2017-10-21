@@ -19,6 +19,8 @@ install:
         rsync -az . "$TRAVIS_BUILD_DIR"
         cd "$TRAVIS_BUILD_DIR"
         eval "$(gimme $GO)"
+    # workaround for #5
+    - pip install 'cryptography<2'
     - pip install coveralls tox
 script:
     - go get -t
