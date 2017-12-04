@@ -26,11 +26,12 @@ PyObject* PyDockerfile_NewCommand(
     PyObject* json,
     PyObject* original,
     PyObject* start_line,
+    PyObject* flags,
     PyObject* value
 ) {
     return PyObject_CallFunction(
-        PyDockerfile_Command, "OOOOOO",
-        cmd, sub_cmd, json, original, start_line, value
+        PyDockerfile_Command, "OOOOOOO",
+        cmd, sub_cmd, json, original, start_line, flags, value
     );
 }
 
@@ -51,7 +52,7 @@ static PyObject* _setup_module(PyObject* module) {
         PyObject* collections = PyImport_ImportModule("collections");
         PyDockerfile_Command = PyObject_CallMethod(
             collections, "namedtuple", "ss",
-            "Command", "cmd sub_cmd json original start_line value"
+            "Command", "cmd sub_cmd json original start_line flags value"
         );
         PyObject_SetAttrString(
             PyDockerfile_Command, "__module__",
