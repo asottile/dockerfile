@@ -3,12 +3,12 @@ package main
 // #include <stdlib.h>
 // #include <Python.h>
 //
-// int PyDockerfile_PyArg_ParseTuple_U(PyObject*, PyObject**);
-// PyObject* PyDockerfile_Py_None;
+// extern int PyDockerfile_PyArg_ParseTuple_U(PyObject*, PyObject**);
+// extern PyObject* PyDockerfile_Py_None;
 //
-// PyObject* PyDockerfile_GoIOError;
-// PyObject* PyDockerfile_GoParseError;
-// PyObject* PyDockerfile_NewCommand(
+// extern PyObject* PyDockerfile_GoIOError;
+// extern PyObject* PyDockerfile_GoParseError;
+// extern PyObject* PyDockerfile_NewCommand(
 //     PyObject*, PyObject*, PyObject*, PyObject*, PyObject*, PyObject*
 // );
 import "C"
