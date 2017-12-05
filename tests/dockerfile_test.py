@@ -35,30 +35,39 @@ def test_parse_string_success():
         'FROM ubuntu:xenial\n'
         'RUN echo hi > /etc/hi.conf\n'
         'CMD ["echo"]\n'
+        'HEALTHCHECK --retries=5 CMD echo hi\n'
         'ONBUILD ADD foo bar\n'
         'ONBUILD RUN ["cat", "bar"]\n'
     )
     assert ret == (
         dockerfile.Command(
-            cmd='from', sub_cmd=None, json=False, value=('ubuntu:xenial',),
+            cmd='from', sub_cmd=None, json=False, flags=(),
+            value=('ubuntu:xenial',),
             start_line=1, original='FROM ubuntu:xenial',
         ),
         dockerfile.Command(
-            cmd='run', sub_cmd=None, json=False,
+            cmd='run', sub_cmd=None, json=False, flags=(),
             value=('echo hi > /etc/hi.conf',),
             start_line=2, original='RUN echo hi > /etc/hi.conf',
         ),
         dockerfile.Command(
-            cmd='cmd', sub_cmd=None, json=True, value=('echo',),
+            cmd='cmd', sub_cmd=None, json=True, flags=(), value=('echo',),
             start_line=3, original='CMD ["echo"]',
         ),
         dockerfile.Command(
-            cmd='onbuild', sub_cmd='add', json=False, value=('foo', 'bar'),
-            start_line=4, original='ONBUILD ADD foo bar',
+            cmd='healthcheck', sub_cmd=None, json=False,
+            flags=('--retries=5',), value=('CMD', 'echo hi'),
+            start_line=4, original='HEALTHCHECK --retries=5 CMD echo hi',
         ),
         dockerfile.Command(
-            cmd='onbuild', sub_cmd='run', json=True, value=('cat', 'bar'),
-            start_line=5, original='ONBUILD RUN ["cat", "bar"]',
+            cmd='onbuild', sub_cmd='add', json=False, flags=(),
+            value=('foo', 'bar'),
+            start_line=5, original='ONBUILD ADD foo bar',
+        ),
+        dockerfile.Command(
+            cmd='onbuild', sub_cmd='run', json=True, flags=(),
+            value=('cat', 'bar'),
+            start_line=6, original='ONBUILD RUN ["cat", "bar"]',
         ),
     )
 
@@ -71,11 +80,11 @@ def test_parse_string_text():
     assert ret == (
         dockerfile.Command(
             cmd='from', sub_cmd=None, json=False, value=('ubuntu:xenial',),
-            start_line=1, original='FROM ubuntu:xenial',
+            start_line=1, original='FROM ubuntu:xenial', flags=(),
         ),
         dockerfile.Command(
             cmd='cmd', sub_cmd=None, json=True, value=('echo', '☃'),
-            start_line=2, original='CMD ["echo", "☃"]',
+            start_line=2, original='CMD ["echo", "☃"]', flags=(),
         ),
     )
 
@@ -84,11 +93,12 @@ def test_parse_file_success():
     ret = dockerfile.parse_file('testfiles/Dockerfile.ok')
     assert ret == (
         dockerfile.Command(
-            cmd='from', sub_cmd=None, json=False, value=('ubuntu:xenial',),
+            cmd='from', sub_cmd=None, json=False, flags=(),
+            value=('ubuntu:xenial',),
             start_line=1, original='FROM ubuntu:xenial',
         ),
         dockerfile.Command(
-            cmd='cmd', sub_cmd=None, json=True, value=('echo', 'hi'),
+            cmd='cmd', sub_cmd=None, json=True, flags=(), value=('echo', 'hi'),
             start_line=2, original='CMD ["echo", "hi"]',
         ),
     )

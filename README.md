@@ -45,8 +45,8 @@ Possible exceptions:
 
 ```python
 >>> pprint.pprint(dockerfile.parse_file('testfiles/Dockerfile.ok'))
-(Command(cmd='from', sub_cmd=None, json=False, original='FROM ubuntu:xenial', start_line=1, value=('ubuntu:xenial',)),
- Command(cmd='cmd', sub_cmd=None, json=True, original='CMD ["echo", "hi"]', start_line=2, value=('echo', 'hi')))
+(Command(cmd='from', sub_cmd=None, json=False, original='FROM ubuntu:xenial', start_line=1, flags=(), value=('ubuntu:xenial',)),
+ Command(cmd='cmd', sub_cmd=None, json=True, original='CMD ["echo", "hi"]', start_line=2, flags=(), value=('echo', 'hi')))
 ```
 
 #### `dockerfile.parse_string(s)`
@@ -59,7 +59,7 @@ Possible exceptions:
 
 ```python
 >>> dockerfile.parse_string('FROM ubuntu:xenial')
-(Command(cmd='from', sub_cmd=None, json=False, original='FROM ubuntu:xenial', start_line=1, value=('ubuntu:xenial',)),)
+(Command(cmd='from', sub_cmd=None, json=False, original='FROM ubuntu:xenial', start_line=1, flags=(), value=('ubuntu:xenial',)),)
 ```
 
 ## go library

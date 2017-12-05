@@ -17,6 +17,7 @@ type Command struct {
 	Json      bool     // whether the value is written in json form
 	Original  string   // The original source line
 	StartLine int      // The original source line number
+	Flags     []string // Any flags such as `--from=...` for `COPY`.
 	Value     []string // The contents of the command (ex: `ubuntu:xenial`)
 }
 
@@ -63,6 +64,7 @@ func ParseReader(file io.Reader) ([]Command, error) {
 			Cmd:       child.Value,
 			Original:  child.Original,
 			StartLine: child.StartLine,
+			Flags:     child.Flags,
 		}
 
 		// Only happens for ONBUILD

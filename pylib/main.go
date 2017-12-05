@@ -9,7 +9,8 @@ package main
 // extern PyObject* PyDockerfile_GoIOError;
 // extern PyObject* PyDockerfile_GoParseError;
 // extern PyObject* PyDockerfile_NewCommand(
-//     PyObject*, PyObject*, PyObject*, PyObject*, PyObject*, PyObject*
+//     PyObject*, PyObject*, PyObject*, PyObject*, PyObject*, PyObject*,
+//     PyObject*
 // );
 import "C"
 import (
@@ -75,6 +76,7 @@ func boolToInt(b bool) int {
 
 func cmdsToPy(cmds []dockerfile.Command) *C.PyObject {
 	var pyCmd, pySubCmd, pyJson, pyOriginal, pyStartLine, pyValue *C.PyObject
+	var pyFlags *C.PyObject
 	var ret *C.PyObject
 	decrefAll := func() {
 		C.Py_DecRef(pyCmd)
@@ -82,6 +84,7 @@ func cmdsToPy(cmds []dockerfile.Command) *C.PyObject {
 		C.Py_DecRef(pyJson)
 		C.Py_DecRef(pyOriginal)
 		C.Py_DecRef(pyStartLine)
+		C.Py_DecRef(pyFlags)
 		C.Py_DecRef(pyValue)
 		C.Py_DecRef(ret)
 	}
@@ -110,6 +113,12 @@ func cmdsToPy(cmds []dockerfile.Command) *C.PyObject {
 
 		pyStartLine = C.PyLong_FromLong(C.long(cmd.StartLine))
 
+		pyFlags = sliceToTuple(cmd.Flags)
+		if pyFlags == nil {
+			decrefAll()
+			return nil
+		}
+
 		pyValue = sliceToTuple(cmd.Value)
 		if pyValue == nil {
 			decrefAll()
@@ -117,7 +126,7 @@ func cmdsToPy(cmds []dockerfile.Command) *C.PyObject {
 		}
 
 		pyCmd := C.PyDockerfile_NewCommand(
-			pyCmd, pySubCmd, pyJson, pyOriginal, pyStartLine, pyValue,
+			pyCmd, pySubCmd, pyJson, pyOriginal, pyStartLine, pyFlags, pyValue,
 		)
 		C.PyTuple_SetItem(ret, C.Py_ssize_t(i), pyCmd)
 	}
