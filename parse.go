@@ -51,15 +51,13 @@ func AllCmds() []string {
 
 // Parse a Dockerfile from a reader.  A ParseError may occur.
 func ParseReader(file io.Reader) ([]Command, error) {
-	directive := parser.Directive{LookingForDirectives: true}
-	parser.SetEscapeToken(parser.DefaultEscapeToken, &directive)
-	ast, err := parser.Parse(file, &directive)
+	res, err := parser.Parse(file)
 	if err != nil {
 		return nil, ParseError{err.Error()}
 	}
 
 	var ret []Command
-	for _, child := range ast.Children {
+	for _, child := range res.AST.Children {
 		cmd := Command{
 			Cmd:       child.Value,
 			Original:  child.Original,
