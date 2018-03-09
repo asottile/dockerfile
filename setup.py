@@ -17,7 +17,7 @@ setup(
         'official go parser.'
     ),
     url='https://github.com/asottile/dockerfile',
-    version='2.0.0',
+    version='2.0.1',
     author='Anthony Sottile',
     author_email='asottile@umich.edu',
     classifiers=[
