@@ -2,13 +2,11 @@ language: python
 sudo: false
 matrix:
     include:
-        -   env: TOXENV=py27 GO=1.6
-        -   env: TOXENV=py27 GO=1.7
-        -   env: TOXENV=py35 GO=1.7
-            python: 3.5
-        -   env: TOXENV=py36 GO=1.7
+        -   env: TOXENV=py27 GO=1.10
+        -   env: TOXENV=py27 GO=1.11
+        -   env: TOXENV=py36 GO=1.11
             python: 3.6
-        -   env: TOXENV=pypy GO=1.10
+        -   env: TOXENV=pypy GO=1.11
             python: pypy
 install:
     - |
