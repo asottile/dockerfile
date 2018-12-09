@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/asottile/dockerfile.svg?branch=master)](https://travis-ci.org/asottile/dockerfile)
+[![Build status](https://ci.appveyor.com/api/projects/status/l5kj12ysd49xul1l?svg=true)](https://ci.appveyor.com/project/asottile/dockerfile)
 
 dockerfile
 ==========

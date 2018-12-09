@@ -4,7 +4,7 @@ package main
 // #include <Python.h>
 //
 // extern int PyDockerfile_PyArg_ParseTuple_U(PyObject*, PyObject**);
-// extern PyObject* PyDockerfile_Py_None;
+// extern PyObject* PyDockerfile_Py_RETURN_NONE();
 //
 // extern PyObject* PyDockerfile_GoIOError;
 // extern PyObject* PyDockerfile_GoParseError;
@@ -46,8 +46,7 @@ func stringToPy(s string) *C.PyObject {
 
 func stringToPyOrNone(s string) *C.PyObject {
 	if s == "" {
-		C.Py_IncRef(C.PyDockerfile_Py_None)
-		return C.PyDockerfile_Py_None
+		return C.PyDockerfile_Py_RETURN_NONE()
 	} else {
 		return stringToPy(s)
 	}

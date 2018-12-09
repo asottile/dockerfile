@@ -11,7 +11,9 @@ int PyDockerfile_PyArg_ParseTuple_U(PyObject* args, PyObject** s) {
 }
 
 /* go cannot access C macros */
-PyObject* PyDockerfile_Py_None = Py_None;
+PyObject* PyDockerfile_Py_RETURN_NONE() {
+    Py_RETURN_NONE;
+}
 
 /* exception types */
 PyObject* PyDockerfile_GoIOError;
