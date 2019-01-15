@@ -1,5 +1,4 @@
 language: python
-sudo: false
 matrix:
     include:
         -   env: TOXENV=py27 GO=1.10
