@@ -1,7 +1,4 @@
 include *.go pylib/*.c pylib/*.go
-recursive-include vendor/github.com/docker/docker/builder/dockerfile/command *.go
-recursive-include vendor/github.com/docker/docker/builder/dockerfile/parser *.go
-include vendor/github.com/docker/docker/pkg/system/init_*.go
-include vendor/github.com/docker/docker/pkg/system/lcow*.go
-include vendor/github.com/docker/docker/pkg/system/syscall_*.go
+recursive-include vendor/github.com/moby/buildkit/frontend/dockerfile/command *.go
+recursive-include vendor/github.com/moby/buildkit/frontend/dockerfile/parser *.go
 global-exclude *_test.go

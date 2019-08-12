@@ -5,8 +5,8 @@ import (
 	"os"
 	"sort"
 
-	"github.com/docker/docker/builder/dockerfile/command"
-	"github.com/docker/docker/builder/dockerfile/parser"
+	"github.com/moby/buildkit/frontend/dockerfile/command"
+	"github.com/moby/buildkit/frontend/dockerfile/parser"
 )
 
 // Represents a single line (layer) in a Dockerfile.
@@ -16,7 +16,8 @@ type Command struct {
 	SubCmd    string   // for ONBUILD only this holds the sub-command
 	Json      bool     // whether the value is written in json form
 	Original  string   // The original source line
-	StartLine int      // The original source line number
+	StartLine int      // The original source line number which starts this command
+	EndLine   int      // The original source line number which ends this command
 	Flags     []string // Any flags such as `--from=...` for `COPY`.
 	Value     []string // The contents of the command (ex: `ubuntu:xenial`)
 }
@@ -62,6 +63,7 @@ func ParseReader(file io.Reader) ([]Command, error) {
 			Cmd:       child.Value,
 			Original:  child.Original,
 			StartLine: child.StartLine,
+			EndLine:   child.EndLine,
 			Flags:     child.Flags,
 		}
 
