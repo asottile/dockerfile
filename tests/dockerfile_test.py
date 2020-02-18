@@ -1,10 +1,5 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
-
-import pytest
-
 import dockerfile
+import pytest
 
 
 def test_command_module():
@@ -26,7 +21,7 @@ def test_parse_string_parse_error():
     with pytest.raises(dockerfile.GoParseError):
         dockerfile.parse_string(
             'FROM ubuntu:xenial\n'
-            'CMD ["echo", 1]\n'
+            'CMD ["echo", 1]\n',
         )
 
 
@@ -37,7 +32,7 @@ def test_parse_string_success():
         'CMD ["echo"]\n'
         'HEALTHCHECK --retries=5 CMD echo hi\n'
         'ONBUILD ADD foo bar\n'
-        'ONBUILD RUN ["cat", "bar"]\n'
+        'ONBUILD RUN ["cat", "bar"]\n',
     )
     assert ret == (
         dockerfile.Command(
@@ -76,7 +71,7 @@ def test_parse_string_success():
 def test_parse_string_text():
     ret = dockerfile.parse_string(
         'FROM ubuntu:xenial\n'
-        'CMD ["echo", "☃"]\n'
+        'CMD ["echo", "☃"]\n',
     )
     assert ret == (
         dockerfile.Command(

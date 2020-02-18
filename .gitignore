@@ -1,9 +1,9 @@
 *.pyc
 /*.egg-info
-/.pytest_cache
 /.coverage
 /.eggs
+/.mypy_cache
+/.pytest_cache
 /.tox
 /build
 /dist
-/venv-*
