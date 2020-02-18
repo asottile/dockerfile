@@ -67,7 +67,6 @@ static PyObject* _setup_module(PyObject* module) {
     return module;
 }
 
-#if PY_MAJOR_VERSION >= 3
 static struct PyModuleDef module = {
     PyModuleDef_HEAD_INIT,
     "dockerfile",
@@ -79,8 +78,3 @@ static struct PyModuleDef module = {
 PyMODINIT_FUNC PyInit_dockerfile(void) {
     return _setup_module(PyModule_Create(&module));
 }
-#else
-PyMODINIT_FUNC initdockerfile(void) {
-    _setup_module(Py_InitModule3("dockerfile", methods, NULL));
-}
-#endif
