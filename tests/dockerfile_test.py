@@ -1,5 +1,6 @@
-import dockerfile
 import pytest
+
+import dockerfile
 
 
 def test_command_module():
