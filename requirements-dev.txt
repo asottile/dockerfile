@@ -1,5 +1,4 @@
 covdefaults
 coverage
-pre-commit
 pytest
 setuptools-golang>=1.0.0
