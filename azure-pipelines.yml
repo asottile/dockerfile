@@ -16,7 +16,6 @@ resources:
       ref: refs/tags/v1.0.1
 
 jobs:
-- template: job--pre-commit.yml@asottile
 - template: job--go-test.yml@asottile
   parameters:
     go_versions: ['1.12.17', '1.13.8']
