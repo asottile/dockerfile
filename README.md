@@ -43,7 +43,7 @@ Returns a `tuple` of `dockerfile.Command` objects representing each layer of
 the Dockerfile.
 Possible exceptions:
 - `dockerfile.GoIOError`: The file could not be opened.
-- `dockerfile.ParseError`: The Dockerfile was not parseable.
+- `dockerfile.GoParseError`: The Dockerfile was not parseable.
 
 ```python
 >>> pprint.pprint(dockerfile.parse_file('testfiles/Dockerfile.ok'))
@@ -57,7 +57,7 @@ Parse a dockerfile using a string.
 Returns a `tuple` of `dockerfile.Command` objects representing each layer of
 the Dockerfile.
 Possible exceptions:
-- `dockerfile.ParseError`: The Dockerfile was not parseable.
+- `dockerfile.GoParseError`: The Dockerfile was not parseable.
 
 ```python
 >>> dockerfile.parse_string('FROM ubuntu:xenial')
