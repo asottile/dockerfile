@@ -30,7 +30,7 @@ ONBUILD RUN ["cat", "bar"]
 	assert.Nil(t, err)
 	expected := []Command{
 		Command{
-			Cmd:       "from",
+			Cmd:       "FROM",
 			Original:  "FROM ubuntu:xenial",
 			StartLine: 1,
 			EndLine:   1,
@@ -38,7 +38,7 @@ ONBUILD RUN ["cat", "bar"]
 			Value:     []string{"ubuntu:xenial"},
 		},
 		Command{
-			Cmd:       "run",
+			Cmd:       "RUN",
 			Original:  "RUN echo hi > /etc/hi.conf",
 			StartLine: 2,
 			EndLine:   2,
@@ -46,7 +46,7 @@ ONBUILD RUN ["cat", "bar"]
 			Value:     []string{"echo hi > /etc/hi.conf"},
 		},
 		Command{
-			Cmd:       "cmd",
+			Cmd:       "CMD",
 			Json:      true,
 			Original:  "CMD [\"echo\"]",
 			StartLine: 3,
@@ -55,7 +55,7 @@ ONBUILD RUN ["cat", "bar"]
 			Value:     []string{"echo"},
 		},
 		Command{
-			Cmd:       "healthcheck",
+			Cmd:       "HEALTHCHECK",
 			SubCmd:    "",
 			Original:  "HEALTHCHECK --retries=5 CMD echo hi",
 			StartLine: 4,
@@ -64,8 +64,8 @@ ONBUILD RUN ["cat", "bar"]
 			Value:     []string{"CMD", "echo hi"},
 		},
 		Command{
-			Cmd:       "onbuild",
-			SubCmd:    "add",
+			Cmd:       "ONBUILD",
+			SubCmd:    "ADD",
 			Original:  "ONBUILD ADD foo bar",
 			StartLine: 5,
 			EndLine:   5,
@@ -73,8 +73,8 @@ ONBUILD RUN ["cat", "bar"]
 			Value:     []string{"foo", "bar"},
 		},
 		Command{
-			Cmd:       "onbuild",
-			SubCmd:    "run",
+			Cmd:       "ONBUILD",
+			SubCmd:    "RUN",
 			Json:      true,
 			Original:  "ONBUILD RUN [\"cat\", \"bar\"]",
 			StartLine: 6,
@@ -97,7 +97,7 @@ func TestParseFile(t *testing.T) {
 	assert.Nil(t, err)
 	expected := []Command{
 		Command{
-			Cmd:       "from",
+			Cmd:       "FROM",
 			Original:  "FROM ubuntu:xenial",
 			StartLine: 1,
 			EndLine:   1,
@@ -105,7 +105,7 @@ func TestParseFile(t *testing.T) {
 			Value:     []string{"ubuntu:xenial"},
 		},
 		Command{
-			Cmd:       "cmd",
+			Cmd:       "CMD",
 			Original:  "CMD [\"echo\", \"hi\"]",
 			StartLine: 2,
 			EndLine:   2,

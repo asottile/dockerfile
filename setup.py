@@ -1,14 +1,8 @@
-import os.path
 import platform
 import sys
 
 from setuptools import Extension
 from setuptools import setup
-
-if not os.path.exists('vendor/github.com/moby/buildkit/frontend'):
-    print('moby checkout is missing!')
-    print('Run `git submodule update --init`')
-    exit(1)
 
 if sys.platform != 'win32' and platform.python_implementation() == 'CPython':
     try:
