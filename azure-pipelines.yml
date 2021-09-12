@@ -21,6 +21,15 @@ jobs:
 - template: job--python-tox.yml@asottile
   parameters:
     toxenvs: [py36]
+    os: macos
+    wheel_tags: true
+    pre_test:
+    - task: GoTool@0
+      inputs:
+        version: '1.17.1'
+- template: job--python-tox.yml@asottile
+  parameters:
+    toxenvs: [py36]
     os: linux
     name_postfix: _go_1_16
     pre_test:
