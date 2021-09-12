@@ -6,9 +6,6 @@ trigger:
 
 resources:
   repositories:
-    - repository: self
-      checkoutOptions:
-        submodules: true
     - repository: asottile
       type: github
       endpoint: github
@@ -18,24 +15,24 @@ resources:
 jobs:
 - template: job--go-test.yml@asottile
   parameters:
-    go_versions: ['1.14.11', '1.15.4']
+    go_versions: ['1.16.8', '1.17.1']
     os: linux
     tests: '.'  # only test the top level
 - template: job--python-tox.yml@asottile
   parameters:
     toxenvs: [py36]
     os: linux
-    name_postfix: _go_1_14
+    name_postfix: _go_1_16
     pre_test:
     - task: GoTool@0
       inputs:
-        version: '1.14.11'
+        version: '1.16.8'
 - template: job--python-tox.yml@asottile
   parameters:
     toxenvs: [pypy3, py36, py37, py38]
     os: linux
-    name_postfix: _go_1_15
+    name_postfix: _go_1_17
     pre_test:
     - task: GoTool@0
       inputs:
-        version: '1.15.4'
+        version: '1.17.1'

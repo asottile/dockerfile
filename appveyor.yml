@@ -5,7 +5,6 @@ environment:
 install:
 -   'SET PATH=%PYTHON%;%PYTHON%\Scripts;C:\MinGW\bin;C:\go-x86\bin;%PATH%'
 -   'SET GOROOT=C:\go-x86'
--   git submodule update --init
 -   pip install pytest .
 
 # Not a C# project
