@@ -20,7 +20,7 @@ jobs:
     tests: '.'  # only test the top level
 - template: job--python-tox.yml@asottile
   parameters:
-    toxenvs: [py36]
+    toxenvs: [py37]
     os: macos
     wheel_tags: true
     pre_test:
