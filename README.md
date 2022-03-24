@@ -1,6 +1,6 @@
-[![Build Status](https://asottile.visualstudio.com/asottile/_apis/build/status/asottile.dockerfile?branchName=master)](https://asottile.visualstudio.com/asottile/_build/latest?definitionId=14&branchName=master)
+[![Build Status](https://asottile.visualstudio.com/asottile/_apis/build/status/asottile.dockerfile?branchName=main)](https://asottile.visualstudio.com/asottile/_build/latest?definitionId=14&branchName=main)
 [![Build status](https://ci.appveyor.com/api/projects/status/l5kj12ysd49xul1l?svg=true)](https://ci.appveyor.com/project/asottile/dockerfile)
-[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/asottile/dockerfile/master.svg)](https://results.pre-commit.ci/latest/github/asottile/dockerfile/master)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/asottile/dockerfile/main.svg)](https://results.pre-commit.ci/latest/github/asottile/dockerfile/main)
 
 dockerfile
 ==========
