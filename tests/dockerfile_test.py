@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-import dockerfile
 import pytest
+
+import dockerfile
 
 
 def test_command_module():
