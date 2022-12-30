@@ -12,6 +12,7 @@ jobs:
     with:
       env: '["py37"]'
       os: macos-latest
+      wheel-tags: true
   main-linux:
     uses: asottile/workflows/.github/workflows/tox.yml@v1.2.0
     with:
