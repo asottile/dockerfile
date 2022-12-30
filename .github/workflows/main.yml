@@ -1,0 +1,26 @@
+name: main
+
+on:
+  push:
+    branches: [main, test-me-*]
+    tags:
+  pull_request:
+
+jobs:
+  main-macos:
+    uses: asottile/workflows/.github/workflows/tox.yml@v1.2.0
+    with:
+      env: '["py37"]'
+      os: macos-latest
+  main-linux:
+    uses: asottile/workflows/.github/workflows/tox.yml@v1.2.0
+    with:
+      env: '["py37", "py38", "py39"]'
+      os: ubuntu-latest
+  main-go:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-go@v3
+    - run: go get -v -t -d ./...
+    - run: go test .
