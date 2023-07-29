@@ -10,11 +10,12 @@ jobs:
   main-windows:
     runs-on: windows-latest
     steps:
+    - uses: actions/checkout@v3
     - uses: actions/setup-python@v4
       with:
         python-version: "3.11"
-    - run: echo $env:path.split(";")
-    - run: $env:path.split(";") | Foreach-Object {Get-ChildItem -Path $_ -Filter "python311.dll" -ErrorAction Continue}
+    - uses: actions/setup-go@v3
+    - run: python setup.py bdist_wheel
     # - uses: asottile/workflows/.github/workflows/tox.yml@v1.5.0
     #   with:
     #     env: '["py311"]'
