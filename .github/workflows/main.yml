@@ -13,7 +13,7 @@ jobs:
       matrix:
         python-version: ["3.8", "3.9", "3.10", "3.11"]
     steps:
-    - uses: actions/checkout@v3
+    - uses: asottile/workflows/.github/actions/fast-checkout@v1.5.0
     - uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
