@@ -9,17 +9,25 @@ import (
 	"github.com/moby/buildkit/frontend/dockerfile/parser"
 )
 
+// Represents info about a heredoc.
+type Heredoc struct {
+	Name           string
+	FileDescriptor uint
+	Content        string
+}
+
 // Represents a single line (layer) in a Dockerfile.
 // For example `FROM ubuntu:xenial`
 type Command struct {
-	Cmd       string   // lowercased command name (ex: `from`)
-	SubCmd    string   // for ONBUILD only this holds the sub-command
-	Json      bool     // whether the value is written in json form
-	Original  string   // The original source line
-	StartLine int      // The original source line number which starts this command
-	EndLine   int      // The original source line number which ends this command
-	Flags     []string // Any flags such as `--from=...` for `COPY`.
-	Value     []string // The contents of the command (ex: `ubuntu:xenial`)
+	Cmd       string    // lowercased command name (ex: `from`)
+	SubCmd    string    // for ONBUILD only this holds the sub-command
+	Json      bool      // whether the value is written in json form
+	Original  string    // The original source line
+	StartLine int       // The original source line number which starts this command
+	EndLine   int       // The original source line number which ends this command
+	Flags     []string  // Any flags such as `--from=...` for `COPY`.
+	Value     []string  // The contents of the command (ex: `ubuntu:xenial`)
+	Heredocs  []Heredoc // Extra heredoc content attachments
 }
 
 // A failure in opening a file for reading.
@@ -76,6 +84,18 @@ func ParseReader(file io.Reader) ([]Command, error) {
 		cmd.Json = child.Attributes["json"]
 		for n := child.Next; n != nil; n = n.Next {
 			cmd.Value = append(cmd.Value, n.Value)
+		}
+
+		if len(child.Heredocs) != 0 {
+			// For heredocs, add heredocs extra lines to Original,
+			// and to the heredocs list.
+			cmd.Original = cmd.Original + "\n"
+			for _, heredoc := range child.Heredocs {
+				cmd.Original = cmd.Original + heredoc.Content + heredoc.Name + "\n"
+				cmd.Heredocs = append(cmd.Heredocs, Heredoc{Name: heredoc.Name,
+					FileDescriptor: heredoc.FileDescriptor,
+					Content:        heredoc.Content})
+			}
 		}
 
 		ret = append(ret, cmd)
