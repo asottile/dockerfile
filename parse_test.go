@@ -116,3 +116,25 @@ func TestParseFile(t *testing.T) {
 	}
 	assert.Equal(t, expected, cmds)
 }
+
+func TestParseReaderHeredocs(t *testing.T) {
+	dockerfile := `RUN <<EOF
+source $HOME/.bashrc && echo $HOME
+echo "Hello" >> /hello
+echo "World!" >> /hello
+EOF
+`
+	cmds, err := ParseReader(bytes.NewBufferString(dockerfile))
+	assert.Nil(t, err)
+	expected := []Command{
+		Command{
+			Cmd:       "RUN",
+			Original:  dockerfile,
+			StartLine: 1,
+			EndLine:   5,
+			Flags:     []string{},
+			Value:     []string{"source $HOME/.bashrc && echo $HOME\necho \"Hello\" >> /hello\necho \"World!\" >> /hello\n"},
+		},
+	}
+	assert.Equal(t, expected, cmds)
+}

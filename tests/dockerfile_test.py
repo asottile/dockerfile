@@ -101,3 +101,25 @@ def test_parse_file_success():
             start_line=2, end_line=2, original='CMD ["echo", "hi"]',
         ),
     )
+
+
+def test_heredoc_string_success():
+    test_string = (
+        'RUN <<EOF\n'
+        'source $HOME/.bashrc && echo $HOME\n'
+        'echo "Hello" >> /hello\n'
+        'echo "World!" >> /hello\n'
+        'EOF\n'
+    )
+    ret = dockerfile.parse_string(test_string)
+    assert ret == (
+        dockerfile.Command(
+            cmd='RUN', sub_cmd=None, json=False, flags=(),
+            value=(
+                'source $HOME/.bashrc && echo $HOME\n'
+                'echo "Hello" >> /hello\n'
+                'echo "World!" >> /hello\n',
+            ),
+            start_line=1, end_line=5, original=test_string,
+        ),
+    )
