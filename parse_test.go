@@ -133,7 +133,29 @@ EOF
 			StartLine: 1,
 			EndLine:   5,
 			Flags:     []string{},
-			Value:     []string{"source $HOME/.bashrc && echo $HOME\necho \"Hello\" >> /hello\necho \"World!\" >> /hello\n"},
+			Value:     []string{"<<EOF", "source $HOME/.bashrc && echo $HOME\necho \"Hello\" >> /hello\necho \"World!\" >> /hello\nEOF\n"},
+		},
+	}
+	assert.Equal(t, expected, cmds)
+}
+
+func TestParseReaderHeredocsMultiple(t *testing.T) {
+	dockerfile := `COPY <<FILE1 <<FILE2 /dest
+content 1
+FILE1
+content 2
+FILE2
+`
+	cmds, err := ParseReader(bytes.NewBufferString(dockerfile))
+	assert.Nil(t, err)
+	expected := []Command{
+		Command{
+			Cmd:       "COPY",
+			Original:  dockerfile,
+			StartLine: 1,
+			EndLine:   5,
+			Flags:     []string{},
+			Value:     []string{"<<FILE1", "<<FILE2", "/dest", "content 1\nFILE1\n", "content 2\nFILE2\n"},
 		},
 	}
 	assert.Equal(t, expected, cmds)

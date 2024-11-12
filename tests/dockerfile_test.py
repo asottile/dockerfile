@@ -116,9 +116,37 @@ def test_heredoc_string_success():
         dockerfile.Command(
             cmd='RUN', sub_cmd=None, json=False, flags=(),
             value=(
+                '<<EOF',
                 'source $HOME/.bashrc && echo $HOME\n'
                 'echo "Hello" >> /hello\n'
-                'echo "World!" >> /hello\n',
+                'echo "World!" >> /hello\n'
+                'EOF\n',
+            ),
+            start_line=1, end_line=5, original=test_string,
+        ),
+    )
+
+
+def test_heredoc_string_multiple_success():
+    test_string = (
+        'COPY <<FILE1 <<FILE2 /dest\n'
+        'content 1\n'
+        'FILE1\n'
+        'content 2\n'
+        'FILE2\n'
+    )
+    ret = dockerfile.parse_string(test_string)
+    assert ret == (
+        dockerfile.Command(
+            cmd='COPY', sub_cmd=None, json=False, flags=(),
+            value=(
+                '<<FILE1',
+                '<<FILE2',
+                '/dest',
+                'content 1\n'
+                'FILE1\n',
+                'content 2\n'
+                'FILE2\n',
             ),
             start_line=1, end_line=5, original=test_string,
         ),
