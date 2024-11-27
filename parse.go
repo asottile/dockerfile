@@ -9,6 +9,13 @@ import (
 	"github.com/moby/buildkit/frontend/dockerfile/parser"
 )
 
+// Represents info about a heredoc.
+type Heredoc struct {
+	Name           string
+	FileDescriptor uint
+	Content        string
+}
+
 // Represents a single line (layer) in a Dockerfile.
 // For example `FROM ubuntu:xenial`
 type Command struct {
@@ -20,6 +27,7 @@ type Command struct {
 	EndLine   int      // The original source line number which ends this command
 	Flags     []string // Any flags such as `--from=...` for `COPY`.
 	Value     []string // The contents of the command (ex: `ubuntu:xenial`)
+	Heredocs  []Heredoc // Extra heredoc content attachments
 }
 
 // A failure in opening a file for reading.
@@ -88,6 +96,9 @@ func ParseReader(file io.Reader) ([]Command, error) {
 			for _, heredoc := range child.Heredocs {
 				cmd.Original = cmd.Original + heredoc.Content + heredoc.Name + "\n"
 				cmd.Value = append(cmd.Value, heredoc.Content)
+				cmd.Heredocs = append(cmd.Heredocs, Heredoc{Name: heredoc.Name, 
+														    FileDescriptor: heredoc.FileDescriptor, 
+															Content: heredoc.Content})
 			}
 		}
 
