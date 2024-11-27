@@ -134,10 +134,12 @@ EOF
 			EndLine:   5,
 			Flags:     []string{},
 			Value:     []string{"source $HOME/.bashrc && echo $HOME\necho \"Hello\" >> /hello\necho \"World!\" >> /hello\n"},
-			Heredocs:  []Heredoc{Heredoc{Name: "EOF", 
-							              FileDescriptor: 0, 
-										  Content: "source $HOME/.bashrc && echo $HOME\necho \"Hello\" >> /hello\necho \"World!\" >> /hello\n"},
-							    },
+			Heredocs: []Heredoc{
+				Heredoc{
+					Name:           "EOF",
+					FileDescriptor: 0,
+					Content:        "source $HOME/.bashrc && echo $HOME\necho \"Hello\" >> /hello\necho \"World!\" >> /hello\n"},
+			},
 		},
 	}
 	assert.Equal(t, expected, cmds)
@@ -160,13 +162,16 @@ FILE2
 			EndLine:   5,
 			Flags:     []string{},
 			Value:     []string{"content 1\n", "content 2\n"},
-			Heredocs:  []Heredoc{Heredoc{Name: "FILE1", 
-							              FileDescriptor: 0, 
-										  Content: "content 1\n"},
-								Heredoc{Name: "FILE2", 
-							              FileDescriptor: 0, 
-										  Content: "content 2\n"},										  
-							    },			
+			Heredocs: []Heredoc{
+				Heredoc{
+					Name:           "FILE1",
+					FileDescriptor: 0,
+					Content:        "content 1\n"},
+				Heredoc{
+					Name:           "FILE2",
+					FileDescriptor: 0,
+					Content:        "content 2\n"},
+			},
 		},
 	}
 	assert.Equal(t, expected, cmds)

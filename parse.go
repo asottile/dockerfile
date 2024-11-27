@@ -19,14 +19,14 @@ type Heredoc struct {
 // Represents a single line (layer) in a Dockerfile.
 // For example `FROM ubuntu:xenial`
 type Command struct {
-	Cmd       string   // lowercased command name (ex: `from`)
-	SubCmd    string   // for ONBUILD only this holds the sub-command
-	Json      bool     // whether the value is written in json form
-	Original  string   // The original source line
-	StartLine int      // The original source line number which starts this command
-	EndLine   int      // The original source line number which ends this command
-	Flags     []string // Any flags such as `--from=...` for `COPY`.
-	Value     []string // The contents of the command (ex: `ubuntu:xenial`)
+	Cmd       string    // lowercased command name (ex: `from`)
+	SubCmd    string    // for ONBUILD only this holds the sub-command
+	Json      bool      // whether the value is written in json form
+	Original  string    // The original source line
+	StartLine int       // The original source line number which starts this command
+	EndLine   int       // The original source line number which ends this command
+	Flags     []string  // Any flags such as `--from=...` for `COPY`.
+	Value     []string  // The contents of the command (ex: `ubuntu:xenial`)
 	Heredocs  []Heredoc // Extra heredoc content attachments
 }
 
@@ -96,9 +96,9 @@ func ParseReader(file io.Reader) ([]Command, error) {
 			for _, heredoc := range child.Heredocs {
 				cmd.Original = cmd.Original + heredoc.Content + heredoc.Name + "\n"
 				cmd.Value = append(cmd.Value, heredoc.Content)
-				cmd.Heredocs = append(cmd.Heredocs, Heredoc{Name: heredoc.Name, 
-														    FileDescriptor: heredoc.FileDescriptor, 
-															Content: heredoc.Content})
+				cmd.Heredocs = append(cmd.Heredocs, Heredoc{Name: heredoc.Name,
+					FileDescriptor: heredoc.FileDescriptor,
+					Content:        heredoc.Content})
 			}
 		}
 
