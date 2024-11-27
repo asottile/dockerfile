@@ -74,8 +74,11 @@ func ParseReader(file io.Reader) ([]Command, error) {
 		}
 
 		cmd.Json = child.Attributes["json"]
-		for n := child.Next; n != nil; n = n.Next {
-			cmd.Value = append(cmd.Value, n.Value)
+
+		if len(child.Heredocs) == 0 {
+			for n := child.Next; n != nil; n = n.Next {
+				cmd.Value = append(cmd.Value, n.Value)
+			}
 		}
 
 		if len(child.Heredocs) != 0 {
@@ -84,7 +87,7 @@ func ParseReader(file io.Reader) ([]Command, error) {
 			cmd.Original = cmd.Original + "\n"
 			for _, heredoc := range child.Heredocs {
 				cmd.Original = cmd.Original + heredoc.Content + heredoc.Name + "\n"
-				cmd.Value = append(cmd.Value, heredoc.Content+heredoc.Name+"\n")
+				cmd.Value = append(cmd.Value, heredoc.Content)
 			}
 		}
 

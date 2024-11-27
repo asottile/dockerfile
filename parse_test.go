@@ -133,7 +133,7 @@ EOF
 			StartLine: 1,
 			EndLine:   5,
 			Flags:     []string{},
-			Value:     []string{"<<EOF", "source $HOME/.bashrc && echo $HOME\necho \"Hello\" >> /hello\necho \"World!\" >> /hello\nEOF\n"},
+			Value:     []string{"source $HOME/.bashrc && echo $HOME\necho \"Hello\" >> /hello\necho \"World!\" >> /hello\n"},
 		},
 	}
 	assert.Equal(t, expected, cmds)
@@ -155,7 +155,7 @@ FILE2
 			StartLine: 1,
 			EndLine:   5,
 			Flags:     []string{},
-			Value:     []string{"<<FILE1", "<<FILE2", "/dest", "content 1\nFILE1\n", "content 2\nFILE2\n"},
+			Value:     []string{"content 1\n", "content 2\n"},
 		},
 	}
 	assert.Equal(t, expected, cmds)
