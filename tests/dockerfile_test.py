@@ -115,7 +115,7 @@ def test_parse_file_success():
 
 def test_heredoc_string_success():
     test_string = (
-        'RUN <<EOF\n'
+        'RUN 3<<EOF\n'
         'source $HOME/.bashrc && echo $HOME\n'
         'echo "Hello" >> /hello\n'
         'echo "World!" >> /hello\n'
@@ -137,7 +137,7 @@ def test_heredoc_string_success():
                     content='source $HOME/.bashrc && echo $HOME\n'
                             'echo "Hello" >> /hello\n'
                             'echo "World!" >> /hello\n',
-                    file_descriptor=0,
+                    file_descriptor=3,
                 ),
             ),
         ),

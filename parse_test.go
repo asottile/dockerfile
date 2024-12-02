@@ -118,7 +118,7 @@ func TestParseFile(t *testing.T) {
 }
 
 func TestParseReaderHeredocs(t *testing.T) {
-	dockerfile := `RUN <<EOF
+	dockerfile := `RUN 3<<EOF
 source $HOME/.bashrc && echo $HOME
 echo "Hello" >> /hello
 echo "World!" >> /hello
@@ -137,7 +137,7 @@ EOF
 			Heredocs: []Heredoc{
 				Heredoc{
 					Name:           "EOF",
-					FileDescriptor: 0,
+					FileDescriptor: 3,
 					Content:        "source $HOME/.bashrc && echo $HOME\necho \"Hello\" >> /hello\necho \"World!\" >> /hello\n"},
 			},
 		},
