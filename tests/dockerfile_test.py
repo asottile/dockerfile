@@ -42,37 +42,31 @@ def test_parse_string_success():
             cmd='FROM', sub_cmd=None, json=False, flags=(),
             value=('ubuntu:xenial',),
             start_line=1, end_line=1, original='FROM ubuntu:xenial',
-            heredocs=(),
         ),
         dockerfile.Command(
             cmd='RUN', sub_cmd=None, json=False, flags=(),
             value=('echo hi > /etc/hi.conf',),
             start_line=2, end_line=2, original='RUN echo hi > /etc/hi.conf',
-            heredocs=(),
         ),
         dockerfile.Command(
             cmd='CMD', sub_cmd=None, json=True, flags=(), value=('echo',),
             start_line=3, end_line=3, original='CMD ["echo"]',
-            heredocs=(),
         ),
         dockerfile.Command(
             cmd='HEALTHCHECK', sub_cmd=None, json=False,
             flags=('--retries=5',), value=('CMD', 'echo hi'),
             start_line=4, end_line=4,
             original='HEALTHCHECK --retries=5 CMD echo hi',
-            heredocs=(),
         ),
         dockerfile.Command(
             cmd='ONBUILD', sub_cmd='ADD', json=False, flags=(),
             value=('foo', 'bar'),
             start_line=5, end_line=5, original='ONBUILD ADD foo bar',
-            heredocs=(),
         ),
         dockerfile.Command(
             cmd='ONBUILD', sub_cmd='RUN', json=True, flags=(),
             value=('cat', 'bar'),
             start_line=6, end_line=6, original='ONBUILD RUN ["cat", "bar"]',
-            heredocs=(),
         ),
     )
 
@@ -86,12 +80,10 @@ def test_parse_string_text():
         dockerfile.Command(
             cmd='FROM', sub_cmd=None, json=False, value=('ubuntu:xenial',),
             start_line=1, end_line=1, original='FROM ubuntu:xenial', flags=(),
-            heredocs=(),
         ),
         dockerfile.Command(
             cmd='CMD', sub_cmd=None, json=True, value=('echo', '☃'),
             start_line=2, end_line=2, original='CMD ["echo", "☃"]', flags=(),
-            heredocs=(),
         ),
     )
 
@@ -103,12 +95,10 @@ def test_parse_file_success():
             cmd='FROM', sub_cmd=None, json=False, flags=(),
             value=('ubuntu:xenial',),
             start_line=1, end_line=1, original='FROM ubuntu:xenial',
-            heredocs=(),
         ),
         dockerfile.Command(
             cmd='CMD', sub_cmd=None, json=True, flags=(), value=('echo', 'hi'),
             start_line=2, end_line=2, original='CMD ["echo", "hi"]',
-            heredocs=(),
         ),
     )
 
