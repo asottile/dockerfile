@@ -116,3 +116,63 @@ func TestParseFile(t *testing.T) {
 	}
 	assert.Equal(t, expected, cmds)
 }
+
+func TestParseReaderHeredocs(t *testing.T) {
+	dockerfile := `RUN 3<<EOF
+source $HOME/.bashrc && echo $HOME
+echo "Hello" >> /hello
+echo "World!" >> /hello
+EOF
+`
+	cmds, err := ParseReader(bytes.NewBufferString(dockerfile))
+	assert.Nil(t, err)
+	expected := []Command{
+		Command{
+			Cmd:       "RUN",
+			Original:  dockerfile,
+			StartLine: 1,
+			EndLine:   5,
+			Flags:     []string{},
+			Value:     []string{"3<<EOF"},
+			Heredocs: []Heredoc{
+				Heredoc{
+					Name:           "EOF",
+					FileDescriptor: 3,
+					Content:        "source $HOME/.bashrc && echo $HOME\necho \"Hello\" >> /hello\necho \"World!\" >> /hello\n"},
+			},
+		},
+	}
+	assert.Equal(t, expected, cmds)
+}
+
+func TestParseReaderHeredocsMultiple(t *testing.T) {
+	dockerfile := `COPY <<FILE1 <<FILE2 /dest
+content 1
+FILE1
+content 2
+FILE2
+`
+	cmds, err := ParseReader(bytes.NewBufferString(dockerfile))
+	assert.Nil(t, err)
+	expected := []Command{
+		Command{
+			Cmd:       "COPY",
+			Original:  dockerfile,
+			StartLine: 1,
+			EndLine:   5,
+			Flags:     []string{},
+			Value:     []string{"<<FILE1", "<<FILE2", "/dest"},
+			Heredocs: []Heredoc{
+				Heredoc{
+					Name:           "FILE1",
+					FileDescriptor: 0,
+					Content:        "content 1\n"},
+				Heredoc{
+					Name:           "FILE2",
+					FileDescriptor: 0,
+					Content:        "content 2\n"},
+			},
+		},
+	}
+	assert.Equal(t, expected, cmds)
+}
