@@ -133,7 +133,7 @@ EOF
 			StartLine: 1,
 			EndLine:   5,
 			Flags:     []string{},
-			Value:     []string{"source $HOME/.bashrc && echo $HOME\necho \"Hello\" >> /hello\necho \"World!\" >> /hello\n"},
+			Value:     []string{"3<<EOF"},
 			Heredocs: []Heredoc{
 				Heredoc{
 					Name:           "EOF",
@@ -161,7 +161,7 @@ FILE2
 			StartLine: 1,
 			EndLine:   5,
 			Flags:     []string{},
-			Value:     []string{"content 1\n", "content 2\n"},
+			Value:     []string{"<<FILE1", "<<FILE2", "/dest"},
 			Heredocs: []Heredoc{
 				Heredoc{
 					Name:           "FILE1",
