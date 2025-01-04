@@ -30,11 +30,26 @@ PyObject* PyDockerfile_NewCommand(
     PyObject* start_line,
     PyObject* end_line,
     PyObject* flags,
-    PyObject* value
+    PyObject* value,
+    PyObject* heredocs
 ) {
     return PyObject_CallFunction(
-        PyDockerfile_Command, "OOOOOOOO",
-        cmd, sub_cmd, json, original, start_line, end_line, flags, value
+        PyDockerfile_Command, "OOOOOOOOO",
+        cmd, sub_cmd, json, original, start_line, end_line, flags, value, heredocs
+    );
+}
+
+/* Heredoc namedtuple */
+PyObject* PyDockerfile_Heredoc;
+
+PyObject* PyDockerfile_NewHeredoc(
+    PyObject* name,
+    PyObject* file_descriptor,
+    PyObject* content
+) {
+    return PyObject_CallFunction(
+        PyDockerfile_Heredoc, "OOO",
+        name, file_descriptor, content
     );
 }
 
@@ -53,15 +68,35 @@ static PyObject* _setup_module(PyObject* module) {
         PyModule_AddObject(module, "GoParseError", PyDockerfile_GoParseError);
 
         PyObject* collections = PyImport_ImportModule("collections");
-        PyDockerfile_Command = PyObject_CallMethod(
-            collections, "namedtuple", "ss",
-            "Command", "cmd sub_cmd json original start_line end_line flags value"
-        );
+
+        // Set up a Command namedtuple object, with empty default for heredocs substructure.
+        PyObject *args = Py_BuildValue("ss", "Command",  "cmd sub_cmd json original start_line end_line flags value heredocs");
+        PyObject *kwargs = PyDict_New();
+        PyObject* defaults = Py_BuildValue("(())");
+        PyDict_SetItemString(kwargs, "defaults", defaults);
+        PyObject *namedtuple_method = PyObject_GetAttrString(collections, "namedtuple");
+        PyDockerfile_Command = PyObject_Call(namedtuple_method, args, kwargs);
+        Py_DECREF(args);
+        Py_DECREF(kwargs);
+        Py_DECREF(defaults);
+        Py_DECREF(namedtuple_method);
         PyObject_SetAttrString(
             PyDockerfile_Command, "__module__",
             PyObject_GetAttrString(module, "__name__")
         );
         PyModule_AddObject(module, "Command", PyDockerfile_Command);
+
+        // Set up a Heredoc namedtuple object.
+        PyDockerfile_Heredoc = PyObject_CallMethod(
+            collections, "namedtuple", "ss",
+            "Heredoc", "name file_descriptor content"
+        );
+        PyObject_SetAttrString(
+            PyDockerfile_Heredoc, "__module__",
+            PyObject_GetAttrString(module, "__name__")
+        );
+        PyModule_AddObject(module, "Heredoc", PyDockerfile_Heredoc);
+
         Py_XDECREF(collections);
     }
     return module;

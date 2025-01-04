@@ -101,3 +101,66 @@ def test_parse_file_success():
             start_line=2, end_line=2, original='CMD ["echo", "hi"]',
         ),
     )
+
+
+def test_heredoc_string_success():
+    test_string = (
+        'RUN 3<<EOF\n'
+        'source $HOME/.bashrc && echo $HOME\n'
+        'echo "Hello" >> /hello\n'
+        'echo "World!" >> /hello\n'
+        'EOF\n'
+    )
+    ret = dockerfile.parse_string(test_string)
+    assert ret == (
+        dockerfile.Command(
+            cmd='RUN', sub_cmd=None, json=False, flags=(),
+            value=(
+                '3<<EOF',
+            ),
+            start_line=1, end_line=5, original=test_string,
+            heredocs=(
+                dockerfile.Heredoc(
+                    name='EOF',
+                    content='source $HOME/.bashrc && echo $HOME\n'
+                            'echo "Hello" >> /hello\n'
+                            'echo "World!" >> /hello\n',
+                    file_descriptor=3,
+                ),
+            ),
+        ),
+    )
+
+
+def test_heredoc_string_multiple_success():
+    test_string = (
+        'COPY <<FILE1 <<FILE2 /dest\n'
+        'content 1\n'
+        'FILE1\n'
+        'content 2\n'
+        'FILE2\n'
+    )
+    ret = dockerfile.parse_string(test_string)
+    assert ret == (
+        dockerfile.Command(
+            cmd='COPY', sub_cmd=None, json=False, flags=(),
+            value=(
+                '<<FILE1',
+                '<<FILE2',
+                '/dest',
+            ),
+            start_line=1, end_line=5, original=test_string,
+            heredocs=(
+                dockerfile.Heredoc(
+                    name='FILE1',
+                    content='content 1\n',
+                    file_descriptor=0,
+                ),
+                dockerfile.Heredoc(
+                    name='FILE2',
+                    content='content 2\n',
+                    file_descriptor=0,
+                ),
+            ),
+        ),
+    )

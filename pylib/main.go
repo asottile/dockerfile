@@ -10,7 +10,10 @@ package main
 // extern PyObject* PyDockerfile_GoParseError;
 // extern PyObject* PyDockerfile_NewCommand(
 //     PyObject*, PyObject*, PyObject*, PyObject*, PyObject*, PyObject*,
-//     PyObject*, PyObject*
+//     PyObject*, PyObject*, PyObject*
+// );
+// extern PyObject* PyDockerfile_NewHeredoc(
+//     PyObject*, PyObject*, PyObject*
 // );
 import "C"
 import (
@@ -65,6 +68,40 @@ func sliceToTuple(strs []string) *C.PyObject {
 	return ret
 }
 
+func heredocsToPy(heredocs []dockerfile.Heredoc) *C.PyObject {
+	var pyName, pyFileDescriptor, pyContent *C.PyObject
+	var ret *C.PyObject
+	decrefAll := func() {
+		C.Py_DecRef(pyName)
+		C.Py_DecRef(pyFileDescriptor)
+		C.Py_DecRef(pyContent)
+		C.Py_DecRef(ret)
+	}
+
+	ret = C.PyTuple_New(C.Py_ssize_t(len(heredocs)))
+	for i, heredoc := range heredocs {
+		pyName := stringToPy(heredoc.Name)
+		if pyName == nil {
+			decrefAll()
+			return nil
+		}
+
+		pyFileDescriptor := C.PyLong_FromLong(C.long(heredoc.FileDescriptor))
+
+		pyContent := stringToPy(heredoc.Content)
+		if pyContent == nil {
+			decrefAll()
+			return nil
+		}
+
+		pyHeredoc := C.PyDockerfile_NewHeredoc(
+			pyName, pyFileDescriptor, pyContent,
+		)
+		C.PyTuple_SetItem(ret, C.Py_ssize_t(i), pyHeredoc)
+	}
+	return ret
+}
+
 func boolToInt(b bool) int {
 	if b {
 		return 1
@@ -74,7 +111,7 @@ func boolToInt(b bool) int {
 }
 
 func cmdsToPy(cmds []dockerfile.Command) *C.PyObject {
-	var pyCmd, pySubCmd, pyJson, pyOriginal, pyStartLine, pyEndLine, pyValue *C.PyObject
+	var pyCmd, pySubCmd, pyJson, pyOriginal, pyStartLine, pyEndLine, pyValue, pyHeredocs *C.PyObject
 	var pyFlags *C.PyObject
 	var ret *C.PyObject
 	decrefAll := func() {
@@ -86,6 +123,7 @@ func cmdsToPy(cmds []dockerfile.Command) *C.PyObject {
 		C.Py_DecRef(pyEndLine)
 		C.Py_DecRef(pyFlags)
 		C.Py_DecRef(pyValue)
+		C.Py_DecRef(pyHeredocs)
 		C.Py_DecRef(ret)
 	}
 
@@ -126,8 +164,14 @@ func cmdsToPy(cmds []dockerfile.Command) *C.PyObject {
 			return nil
 		}
 
+		pyHeredocs = heredocsToPy(cmd.Heredocs)
+		if pyHeredocs == nil {
+			decrefAll()
+			return nil
+		}
+
 		pyCmd := C.PyDockerfile_NewCommand(
-			pyCmd, pySubCmd, pyJson, pyOriginal, pyStartLine, pyEndLine, pyFlags, pyValue,
+			pyCmd, pySubCmd, pyJson, pyOriginal, pyStartLine, pyEndLine, pyFlags, pyValue, pyHeredocs,
 		)
 		C.PyTuple_SetItem(ret, C.Py_ssize_t(i), pyCmd)
 	}
