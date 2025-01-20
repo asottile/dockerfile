@@ -1,3 +1,13 @@
+# DEPRECATED
+
+it turns out multiple go shared objects in a single process is not supported
+
+it likely broke in [go 1.21] and there is no intention to fix it :(
+
+[go 1.21]: https://github.com/golang/go/issues/65050#issue-2074509727
+
+___
+
 [![build status](https://github.com/asottile/dockerfile/actions/workflows/main.yml/badge.svg)](https://github.com/asottile/dockerfile/actions/workflows/main.yml)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/asottile/dockerfile/main.svg)](https://results.pre-commit.ci/latest/github/asottile/dockerfile/main)
 
